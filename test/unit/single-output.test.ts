@@ -309,4 +309,18 @@ describe("finalizeSingleOutput", () => {
 
 		assert.equal(result.displayOutput, "truncated output");
 	});
+
+	it("preserves the saved-output reference for acceptance-only failures", () => {
+		const result = finalizeSingleOutput({
+			fullOutput: "useful output",
+			outputPath: "/tmp/review.md",
+			outputMode: "file-only",
+			exitCode: 1,
+			preserveSavedOutput: true,
+			savedPath: "/tmp/review.md",
+		});
+
+		assert.match(result.displayOutput, /^Output saved to:/);
+		assert.doesNotMatch(result.displayOutput, /useful output/);
+	});
 });
